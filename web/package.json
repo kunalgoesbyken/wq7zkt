@@ -9,7 +9,7 @@
     "prebuild": "npm run gen:api",
     "build": "next build",
     "start": "next start",
-    "pretypecheck": "npm run gen:api",
+    "pretypecheck": "npm run gen:api && next typegen",
     "typecheck": "tsc --noEmit",
     "lint": "eslint"
   },
