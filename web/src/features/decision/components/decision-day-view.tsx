@@ -1,17 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Panel } from "@/components/panel";
+import { Section } from "@/components/section";
 import { EmptyState } from "@/components/states/empty-state";
 import { ErrorState } from "@/components/states/error-state";
 import type { Schemas } from "@/lib/api/client";
 import { useFormat } from "@/lib/format/use-format";
 import { cn } from "@/lib/utils";
 import { useDecisionDay } from "../hooks/use-decision-data";
+import { DayBriefing } from "./day-briefing";
+import { DayDetails } from "./day-details";
+import { DayOutcome } from "./day-outcome";
 import { DecisionChart } from "./decision-chart";
-import { DecisionFacts } from "./decision-facts";
-import { DecisionHeadline } from "./decision-headline";
 import { DecisionDaySkeleton } from "./decision-skeleton";
+import { DemandChart } from "./demand-chart";
 
 type DecisionDayViewProps = {
   market: Schemas["Market"];
@@ -27,32 +29,29 @@ export function DecisionDayView({ market, deliveryDate, bandQuantiles }: Decisio
   if (error) return <ErrorState error={error} onRetry={() => mutate()} />;
   if (!day) return <DecisionDaySkeleton />;
 
-  const hasForecast = day.summary.hours_forecast > 0;
+  if (day.summary.hours_forecast === 0) {
+    return <EmptyState title={t("empty.title")} description={t("empty.description")} />;
+  }
+
+  const deliveryRange = {
+    start: format.dateTime(day.delivery_start_utc, market.timezone, "dayMonthTime"),
+    end: format.dateTime(day.delivery_end_utc, market.timezone, "dayMonthTime"),
+  };
+  const hasDemand = day.summary.demand_forecast_gwh !== null;
 
   return (
-    <div aria-busy={isValidating} className={cn("flex flex-col gap-6 transition-opacity", isValidating && "opacity-60")}>
-      {hasForecast ? (
-        <div className="grid gap-x-10 gap-y-8 rounded-xl bg-card p-5 ring-1 ring-foreground/10 sm:p-7 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <DecisionHeadline marketId={market.id} summary={day.summary} lowerQuantile={bandQuantiles[0]} />
-          </div>
-          <div className="border-t pt-8 lg:col-span-7 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
-            <DecisionFacts day={day} market={market} />
-          </div>
-        </div>
-      ) : (
-        <EmptyState title={t("empty.title")} description={t("empty.description")} />
-      )}
-      <Panel
-        title={t("chart.title")}
-        description={t("chart.description", {
-          start: format.dateTime(day.delivery_start_utc, market.timezone, "dayMonthTime"),
-          end: format.dateTime(day.delivery_end_utc, market.timezone, "dayMonthTime"),
-          timeZone: market.timezone,
-        })}
-      >
+    <div aria-busy={isValidating} className={cn("flex flex-col gap-14 transition-opacity", isValidating && "opacity-60")}>
+      <DayBriefing day={day} market={market} lowerQuantile={bandQuantiles[0]} />
+      <Section title={t("chart.title")} description={t("chart.description", deliveryRange)}>
         <DecisionChart hours={day.hours} timeZone={market.timezone} bandQuantiles={bandQuantiles} />
-      </Panel>
+      </Section>
+      {hasDemand && (
+        <Section title={t("demandChart.title")} description={t("demandChart.description")}>
+          <DemandChart hours={day.hours} timeZone={market.timezone} />
+        </Section>
+      )}
+      <DayOutcome summary={day.summary} />
+      <DayDetails day={day} market={market} />
     </div>
   );
 }

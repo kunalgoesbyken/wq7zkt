@@ -15,6 +15,8 @@
   --color-risk: var(--risk);
   --color-risk-foreground: var(--risk-foreground);
   --color-long: var(--long);
+  --color-demand: var(--demand);
+  --color-other: var(--other);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -46,8 +48,8 @@
 }
 
 :root {
-  --background: oklch(0.972 0.005 230);
-  --foreground: oklch(0.25 0.026 242);
+  --background: oklch(0.988 0.003 230);
+  --foreground: oklch(0.24 0.024 244);
   --card: oklch(0.998 0.002 230);
   --card-foreground: var(--foreground);
   --popover: oklch(0.998 0.002 230);
@@ -57,7 +59,7 @@
   --secondary: oklch(0.945 0.008 232);
   --secondary-foreground: var(--foreground);
   --muted: oklch(0.95 0.007 232);
-  --muted-foreground: oklch(0.49 0.022 242);
+  --muted-foreground: oklch(0.46 0.022 242);
   --accent: oklch(0.94 0.014 226);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.55 0.19 27);
@@ -69,6 +71,8 @@
   --risk: oklch(0.7 0.14 68);
   --risk-foreground: oklch(0.5 0.115 60);
   --long: oklch(0.62 0.045 236);
+  --demand: oklch(0.3 0.02 250);
+  --other: oklch(0.86 0.012 244);
   --chart-1: var(--forecast);
   --chart-2: var(--actual);
   --chart-3: var(--risk);
@@ -96,6 +100,8 @@
   --risk: oklch(0.79 0.13 76);
   --risk-foreground: oklch(0.82 0.12 78);
   --long: oklch(0.67 0.045 238);
+  --demand: oklch(0.9 0.01 240);
+  --other: oklch(0.34 0.016 244);
 }
 
 @utility figures {

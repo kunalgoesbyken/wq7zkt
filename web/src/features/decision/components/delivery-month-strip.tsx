@@ -33,7 +33,7 @@ function errorScale(days: DaySummary[]) {
 
 function cellBackground(step: number | null) {
   if (step === null) return undefined;
-  return { backgroundColor: `color-mix(in oklch, var(--risk) ${intensitySteps[step]}%, var(--card))` };
+  return { backgroundColor: `color-mix(in oklch, var(--risk) ${intensitySteps[step]}%, var(--muted))` };
 }
 
 export function DeliveryMonthStrip({ days, selectedDate, onSelect }: DeliveryMonthStripProps) {
@@ -63,8 +63,8 @@ export function DeliveryMonthStrip({ days, selectedDate, onSelect }: DeliveryMon
                 })}
                 style={cellBackground(step)}
                 className={cn(
-                  "flex h-14 w-full flex-col items-center justify-center gap-0.5 rounded-md border border-transparent text-foreground transition-[box-shadow,transform] outline-none hover:-translate-y-px focus-visible:ring-3 focus-visible:ring-ring/50",
-                  step === null && "border-dashed border-border bg-card text-muted-foreground",
+                  "flex h-14 w-full flex-col items-center justify-center gap-0.5 rounded-md border border-transparent text-foreground transition-shadow outline-none hover:ring-1 hover:ring-foreground/30 focus-visible:ring-3 focus-visible:ring-ring/50",
+                  step === null && "border-dashed border-border text-muted-foreground",
                   step === intensitySteps.length - 1 && "dark:text-background",
                   isSelected && "ring-2 ring-foreground ring-offset-2 ring-offset-background",
                 )}
@@ -83,6 +83,7 @@ export function DeliveryMonthStrip({ days, selectedDate, onSelect }: DeliveryMon
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
         {scale && (
           <span className="flex items-center gap-3">
+            <span>{t("smallerMiss")}</span>
             <span className="figures">{format.mw(scale.min)}</span>
             <span aria-hidden className="flex gap-0.5">
               {intensitySteps.map((_, step) => (
@@ -90,6 +91,7 @@ export function DeliveryMonthStrip({ days, selectedDate, onSelect }: DeliveryMon
               ))}
             </span>
             <span className="figures">{format.mw(scale.max)}</span>
+            <span>{t("biggerMiss")}</span>
           </span>
         )}
         {hasUnmeasuredDays && (

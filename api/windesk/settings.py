@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     markets_file: Path = PACKAGE_DIR / "config" / "markets.json"
     actuals_dataset: str = "FUELHH"
     forecasts_dataset: str = "WINDFOR"
+    demand_actuals_dataset: str = "INDO"
+    demand_forecasts_dataset: str = "NDF"
+    demand_forecast_boundary: str = "N"
     fuel_type: str = "WIND"
     band_quantiles: tuple[float, float] = (0.1, 0.9)
     band_forecast_buckets: int = Field(default=3, ge=1)

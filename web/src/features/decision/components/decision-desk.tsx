@@ -34,14 +34,20 @@ export function DecisionDesk() {
   if (!market || !meta || !deliveryDate || !deliveryWindow) return <DecisionDeskSkeleton />;
 
   return (
-    <div className="flex flex-col gap-6">
-      <PageIntro title={t("title")} description={t("intro")} />
-      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-        <MarketToggle markets={markets} value={market.id} onChange={selectMarket} />
-        <DeliveryDatePicker value={deliveryDate} deliveryWindow={deliveryWindow} onChange={selectDate} />
+    <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-6">
+        <PageIntro title={t("title")} description={t("intro")} />
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+          <MarketToggle markets={markets} value={market.id} onChange={selectMarket} />
+          <DeliveryDatePicker value={deliveryDate} deliveryWindow={deliveryWindow} onChange={selectDate} />
+        </div>
       </div>
-      <DecisionDayView market={market} deliveryDate={deliveryDate} bandQuantiles={meta.band_quantiles} />
-      <DeliveryMonthPanel marketId={market.id} selectedDate={deliveryDate} onSelect={selectDate} />
+      <div className="border-t pt-10">
+        <DecisionDayView market={market} deliveryDate={deliveryDate} bandQuantiles={meta.band_quantiles} />
+      </div>
+      <div className="border-t pt-10">
+        <DeliveryMonthPanel marketId={market.id} selectedDate={deliveryDate} onSelect={selectDate} />
+      </div>
     </div>
   );
 }

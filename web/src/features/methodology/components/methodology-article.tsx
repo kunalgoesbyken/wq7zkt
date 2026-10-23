@@ -2,26 +2,20 @@ import { useTranslations } from "next-intl";
 import { PageIntro } from "@/components/page-intro";
 import { MethodologyScope } from "./methodology-scope";
 
-const sections = ["sources", "alignment", "selection", "band", "sign", "caveats"] as const;
+const steps = ["sources", "alignment", "selection", "errors", "band", "demand"] as const;
 
-type Section = (typeof sections)[number];
+type Step = (typeof steps)[number] | "caveats";
 
-function MethodologySection({ section }: { section: Section }) {
+function Paragraphs({ step }: { step: Step }) {
   const t = useTranslations("methodology");
-  const paragraphs: string[] = t.raw(`${section}.body`);
+  const paragraphs: string[] = t.raw(`${step}.body`);
 
   return (
-    <section id={section} aria-labelledby={`${section}-title`} className="scroll-mt-24 border-t pt-8">
-      <h2 id={`${section}-title`} className="text-lg font-semibold tracking-tight">
-        {t(`${section}.title`)}
-      </h2>
-      <div className="mt-3 flex flex-col gap-3 text-[0.9375rem] leading-relaxed text-foreground/85">
-        {paragraphs.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-        {section === "alignment" && <p className="text-muted-foreground">{t("alignment.sensitivity")}</p>}
-      </div>
-    </section>
+    <div className="flex flex-col gap-3 text-[0.9375rem] leading-relaxed text-pretty">
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
+    </div>
   );
 }
 
@@ -29,34 +23,38 @@ export function MethodologyArticle() {
   const t = useTranslations("methodology");
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-16">
-      <nav aria-label={t("contents")} className="hidden lg:block">
-        <div className="sticky top-24 flex flex-col gap-3">
-          <p className="text-xs text-muted-foreground">{t("contents")}</p>
-          <ul className="flex flex-col gap-1 border-l">
-            {sections.map((section) => (
-              <li key={section}>
-                <a
-                  href={`#${section}`}
-                  className="-ml-px block border-l border-transparent py-1 pl-3 text-sm text-muted-foreground transition-colors outline-none hover:border-foreground hover:text-foreground focus-visible:text-foreground focus-visible:underline"
-                >
-                  {t(`${section}.title`)}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-      <article className="flex max-w-[68ch] flex-col gap-8">
-        <PageIntro title={t("title")} description={t("intro")} />
-        <section aria-label={t("scope.title")} className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium text-muted-foreground">{t("scope.title")}</h2>
-          <MethodologyScope />
-        </section>
-        {sections.map((section) => (
-          <MethodologySection key={section} section={section} />
-        ))}
-      </article>
-    </div>
+    <article className="flex max-w-[70ch] flex-col gap-12">
+      <PageIntro title={t("title")} description={t("intro")} />
+      <section aria-labelledby="scope-title" className="flex flex-col gap-4">
+        <h2 id="scope-title" className="text-[1.0625rem] font-semibold tracking-tight">
+          {t("scope.title")}
+        </h2>
+        <MethodologyScope />
+      </section>
+      <section aria-labelledby="steps-title" className="flex flex-col gap-6">
+        <h2 id="steps-title" className="text-[1.0625rem] font-semibold tracking-tight">
+          {t("stepsTitle")}
+        </h2>
+        <ol className="flex flex-col gap-10">
+          {steps.map((step, index) => (
+            <li key={step} id={step} className="grid scroll-mt-24 grid-cols-[2rem_minmax(0,1fr)] gap-x-3">
+              <span aria-hidden className="figures pt-px text-[1.0625rem] font-semibold text-forecast">
+                {index + 1}
+              </span>
+              <div className="flex flex-col gap-3">
+                <h3 className="text-[1.0625rem] font-semibold tracking-tight text-balance">{t(`${step}.title`)}</h3>
+                <Paragraphs step={step} />
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+      <section aria-labelledby="caveats-title" className="flex flex-col gap-3 border-t pt-10">
+        <h2 id="caveats-title" className="text-[1.0625rem] font-semibold tracking-tight">
+          {t("caveats.title")}
+        </h2>
+        <Paragraphs step="caveats" />
+      </section>
+    </article>
   );
 }

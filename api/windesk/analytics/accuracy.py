@@ -25,7 +25,7 @@ def horizon_hours(
     targets = hours.join(horizons, how="cross").with_columns(
         (pl.col("start_time") - pl.duration(hours=pl.col("horizon_h"))).cast(TIMESTAMP).alias("cutoff")
     )
-    return with_actuals(forecast_as_of(targets, forecasts), actuals).sort("horizon_h", "start_time")
+    return with_actuals(forecast_as_of(targets, forecasts, "forecast_mw"), actuals).sort("horizon_h", "start_time")
 
 
 def by_hour(hours: pl.DataFrame, timezone: str) -> list[HourOfDayStat]:

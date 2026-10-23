@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Panel } from "@/components/panel";
+import { Section } from "@/components/section";
 import { EmptyState } from "@/components/states/empty-state";
 import type { Schemas } from "@/lib/api/client";
 import { useFormat } from "@/lib/format/use-format";
@@ -25,9 +25,9 @@ export function AccuracyReportView({ report, timeZone }: AccuracyReportViewProps
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <AccuracyMetrics metrics={report.metrics} />
-      <Panel
+    <div className="flex flex-col gap-14">
+      <AccuracyMetrics metrics={report.metrics} basis={report.basis} horizon={report.horizon_h} />
+      <Section
         title={t("series.title")}
         description={t("window", {
           start: format.calendarDate(report.window.start, "dayMonth"),
@@ -37,16 +37,16 @@ export function AccuracyReportView({ report, timeZone }: AccuracyReportViewProps
         })}
       >
         <AccuracySeriesChart series={report.series} timeZone={timeZone} />
-      </Panel>
-      <div className="grid gap-6 lg:grid-cols-2">
+      </Section>
+      <div className="grid gap-14 lg:grid-cols-2 lg:gap-12">
         <HorizonCurvePanel selectedHorizon={report.horizon_h} />
-        <Panel title={t("histogram.title")} description={t("histogram.description")}>
+        <Section title={t("histogram.title")} description={t("histogram.description")}>
           <ErrorHistogramChart bins={report.histogram} />
-        </Panel>
+        </Section>
       </div>
-      <Panel title={t("byHour.title")} description={t("byHour.description", { timeZone })}>
+      <Section title={t("byHour.title")} description={t("byHour.description", { timeZone })}>
         <HourlyErrorChart hours={report.by_hour} />
-      </Panel>
+      </Section>
     </div>
   );
 }

@@ -7,6 +7,7 @@ from windesk.localtime import DAY, local_to_utc
 from windesk.schemas import DateWindow, Market, MarketsResponse
 
 HOUR = timedelta(hours=1)
+HALF_HOUR = timedelta(minutes=30)
 
 
 @lru_cache
@@ -34,9 +35,9 @@ def delivery_bounds(market: Market, delivery_date: date) -> tuple[datetime, date
     return start, end
 
 
-def delivery_hours(market: Market, delivery_date: date) -> list[datetime]:
+def delivery_periods(market: Market, delivery_date: date, period: timedelta) -> list[datetime]:
     start, end = delivery_bounds(market, delivery_date)
-    return [start + HOUR * index for index in range((end - start) // HOUR)]
+    return [start + period * index for index in range((end - start) // period)]
 
 
 def delivery_window(market: Market, auction_window: DateWindow) -> DateWindow:

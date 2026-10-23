@@ -12,6 +12,7 @@ class QualityFlag(StrEnum):
     FALLBACK_RUN = "FALLBACK_RUN"
     NO_FORECAST = "NO_FORECAST"
     NO_ACTUAL = "NO_ACTUAL"
+    NO_DEMAND_FORECAST = "NO_DEMAND_FORECAST"
     PARTIAL_COVERAGE = "PARTIAL_COVERAGE"
 
 
@@ -47,11 +48,20 @@ class Coverage(Schema):
     forecast_runs: int
     forecast_runs_from: datetime
     forecast_runs_to: datetime
+    demand_actuals_from: datetime
+    demand_actuals_to: datetime
+    demand_actual_periods: int
+    missing_demand_actual_periods: int
+    demand_forecast_runs: int
+    demand_forecast_runs_from: datetime
+    demand_forecast_runs_to: datetime
 
 
 class MetaResponse(Schema):
     actuals_dataset: str
     forecasts_dataset: str
+    demand_actuals_dataset: str
+    demand_forecasts_dataset: str
     fuel_type: str
     auction_window: DateWindow
     delivery_window: DateWindow
@@ -81,6 +91,11 @@ class DecisionHour(Schema):
     upper_mw: float | None
     source_publish_time: datetime | None
     forecast_age_h: float | None
+    demand_forecast_mw: float | None
+    demand_actual_mw: float | None
+    net_demand_forecast_mw: float | None
+    net_demand_plan_mw: float | None
+    net_demand_actual_mw: float | None
     flags: list[QualityFlag]
 
 
@@ -90,6 +105,11 @@ class DaySummary(Schema):
     lower_gwh: float | None
     energy_at_risk_gwh: float | None
     actual_gwh: float | None
+    demand_forecast_gwh: float | None
+    demand_actual_gwh: float | None
+    net_demand_expected_gwh: float | None
+    net_demand_plan_gwh: float | None
+    net_demand_actual_gwh: float | None
     mae_mw: float | None
     bias_mw: float | None
     hours_total: int
@@ -119,6 +139,7 @@ class BandCoverage(Schema):
 class DecisionCalendar(Schema):
     market_id: str
     metrics: Metrics
+    demand_metrics: Metrics
     band_coverage: BandCoverage
     days: list[DaySummary]
 

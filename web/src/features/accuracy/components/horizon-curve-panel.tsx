@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Panel } from "@/components/panel";
+import { Section } from "@/components/section";
 import { ErrorState } from "@/components/states/error-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useHorizonCurve } from "../hooks/use-accuracy-data";
@@ -14,12 +14,12 @@ export function HorizonCurvePanel({ selectedHorizon }: { selectedHorizon: number
   if (error) return <ErrorState error={error} onRetry={() => mutate()} />;
 
   return (
-    <Panel title={t("title")} description={t("description")}>
+    <Section title={t("title")} description={t("description")}>
       {curve ? (
         <HorizonCurveChart points={curve.points} selectedHorizon={selectedHorizon} />
       ) : (
         <Skeleton className="h-72 w-full" />
       )}
-    </Panel>
+    </Section>
   );
 }

@@ -603,6 +603,38 @@
             "type": "string",
             "format": "date-time",
             "title": "Forecast Runs To"
+          },
+          "demand_actuals_from": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Demand Actuals From"
+          },
+          "demand_actuals_to": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Demand Actuals To"
+          },
+          "demand_actual_periods": {
+            "type": "integer",
+            "title": "Demand Actual Periods"
+          },
+          "missing_demand_actual_periods": {
+            "type": "integer",
+            "title": "Missing Demand Actual Periods"
+          },
+          "demand_forecast_runs": {
+            "type": "integer",
+            "title": "Demand Forecast Runs"
+          },
+          "demand_forecast_runs_from": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Demand Forecast Runs From"
+          },
+          "demand_forecast_runs_to": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Demand Forecast Runs To"
           }
         },
         "type": "object",
@@ -613,7 +645,14 @@
           "missing_actual_periods",
           "forecast_runs",
           "forecast_runs_from",
-          "forecast_runs_to"
+          "forecast_runs_to",
+          "demand_actuals_from",
+          "demand_actuals_to",
+          "demand_actual_periods",
+          "missing_demand_actual_periods",
+          "demand_forecast_runs",
+          "demand_forecast_runs_from",
+          "demand_forecast_runs_to"
         ],
         "title": "Coverage"
       },
@@ -688,6 +727,61 @@
             ],
             "title": "Actual Gwh"
           },
+          "demand_forecast_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Demand Forecast Gwh"
+          },
+          "demand_actual_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Demand Actual Gwh"
+          },
+          "net_demand_expected_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Demand Expected Gwh"
+          },
+          "net_demand_plan_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Demand Plan Gwh"
+          },
+          "net_demand_actual_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Demand Actual Gwh"
+          },
           "mae_mw": {
             "anyOf": [
               {
@@ -737,6 +831,11 @@
           "lower_gwh",
           "energy_at_risk_gwh",
           "actual_gwh",
+          "demand_forecast_gwh",
+          "demand_actual_gwh",
+          "net_demand_expected_gwh",
+          "net_demand_plan_gwh",
+          "net_demand_actual_gwh",
           "mae_mw",
           "bias_mw",
           "hours_total",
@@ -755,6 +854,9 @@
           "metrics": {
             "$ref": "#/components/schemas/Metrics"
           },
+          "demand_metrics": {
+            "$ref": "#/components/schemas/Metrics"
+          },
           "band_coverage": {
             "$ref": "#/components/schemas/BandCoverage"
           },
@@ -770,6 +872,7 @@
         "required": [
           "market_id",
           "metrics",
+          "demand_metrics",
           "band_coverage",
           "days"
         ],
@@ -927,6 +1030,61 @@
             ],
             "title": "Forecast Age H"
           },
+          "demand_forecast_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Demand Forecast Mw"
+          },
+          "demand_actual_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Demand Actual Mw"
+          },
+          "net_demand_forecast_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Demand Forecast Mw"
+          },
+          "net_demand_plan_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Demand Plan Mw"
+          },
+          "net_demand_actual_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Demand Actual Mw"
+          },
           "flags": {
             "items": {
               "$ref": "#/components/schemas/QualityFlag"
@@ -945,6 +1103,11 @@
           "upper_mw",
           "source_publish_time",
           "forecast_age_h",
+          "demand_forecast_mw",
+          "demand_actual_mw",
+          "net_demand_forecast_mw",
+          "net_demand_plan_mw",
+          "net_demand_actual_mw",
           "flags"
         ],
         "title": "DecisionHour"
@@ -1193,6 +1356,14 @@
             "type": "string",
             "title": "Forecasts Dataset"
           },
+          "demand_actuals_dataset": {
+            "type": "string",
+            "title": "Demand Actuals Dataset"
+          },
+          "demand_forecasts_dataset": {
+            "type": "string",
+            "title": "Demand Forecasts Dataset"
+          },
           "fuel_type": {
             "type": "string",
             "title": "Fuel Type"
@@ -1238,6 +1409,8 @@
         "required": [
           "actuals_dataset",
           "forecasts_dataset",
+          "demand_actuals_dataset",
+          "demand_forecasts_dataset",
           "fuel_type",
           "auction_window",
           "delivery_window",
@@ -1340,6 +1513,7 @@
           "FALLBACK_RUN",
           "NO_FORECAST",
           "NO_ACTUAL",
+          "NO_DEMAND_FORECAST",
           "PARTIAL_COVERAGE"
         ],
         "title": "QualityFlag"

@@ -5,11 +5,11 @@ import polars as pl
 TIMESTAMP = pl.Datetime("us", "UTC")
 
 
-def forecast_as_of(targets: pl.DataFrame, forecasts: pl.DataFrame) -> pl.DataFrame:
+def forecast_as_of(targets: pl.DataFrame, forecasts: pl.DataFrame, alias: str) -> pl.DataFrame:
     runs = forecasts.select(
         "start_time",
         pl.col("publish_time").alias("source_publish_time"),
-        pl.col("generation_mw").alias("forecast_mw"),
+        pl.col("value_mw").alias(alias),
     ).sort("source_publish_time")
     return targets.sort("cutoff").join_asof(
         runs,

@@ -1,17 +1,17 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import NamedTuple
 
 import polars as pl
 
-from windesk.analytics.alignment import with_actuals
+from windesk.analytics.alignment import hourly_mean, with_actuals, with_demand, with_net_demand
 from windesk.analytics.metrics import ABS_ERROR, ERROR, QUANTILE_METHOD, scored
 from windesk.analytics.selection import TIMESTAMP, forecast_as_of, latest_run
-from windesk.markets import delivery_bounds, delivery_hours, gate_closure_utc
+from windesk.markets import HALF_HOUR, HOUR, delivery_bounds, delivery_periods, gate_closure_utc
 from windesk.schemas import BandCoverage, DaySummary, DecisionDay, DecisionHour, Market, QualityFlag
 
 MW_PER_GW = 1000
 SECONDS_PER_HOUR = 3600
-HOUR_FLAGS = (QualityFlag.FALLBACK_RUN, QualityFlag.NO_FORECAST, QualityFlag.NO_ACTUAL)
+HOUR_FLAGS = (QualityFlag.FALLBACK_RUN, QualityFlag.NO_FORECAST, QualityFlag.NO_ACTUAL, QualityFlag.NO_DEMAND_FORECAST)
 
 
 FORECAST_BUCKET = "forecast_bucket"
@@ -32,20 +32,32 @@ class DayEvaluation(NamedTuple):
     hours: pl.DataFrame
 
 
-def delivery_targets(market: Market, delivery_dates: list[date]) -> pl.DataFrame:
+def delivery_targets(market: Market, delivery_dates: list[date], period: timedelta) -> pl.DataFrame:
     rows = [
-        {"delivery_date": delivery_date, "start_time": hour, "cutoff": gate_closure_utc(market, delivery_date)}
+        {"delivery_date": delivery_date, "start_time": start, "cutoff": gate_closure_utc(market, delivery_date)}
         for delivery_date in delivery_dates
-        for hour in delivery_hours(market, delivery_date)
+        for start in delivery_periods(market, delivery_date, period)
     ]
     return pl.DataFrame(rows, schema={"delivery_date": pl.Date, "start_time": TIMESTAMP, "cutoff": TIMESTAMP})
 
 
+def gate_closure_demand(market: Market, delivery_dates: list[date], demand_forecasts: pl.DataFrame) -> pl.DataFrame:
+    targets = delivery_targets(market, delivery_dates, HALF_HOUR)
+    selected = forecast_as_of(targets, demand_forecasts, "demand_forecast_mw")
+    return hourly_mean(selected, "demand_forecast_mw", "demand_forecast_mw")
+
+
 def gate_closure_hours(
-    market: Market, delivery_dates: list[date], forecasts: pl.DataFrame, actuals: pl.DataFrame
+    market: Market,
+    delivery_dates: list[date],
+    forecasts: pl.DataFrame,
+    actuals: pl.DataFrame,
+    demand_forecasts: pl.DataFrame,
+    demand_actuals: pl.DataFrame,
 ) -> pl.DataFrame:
-    selected = forecast_as_of(delivery_targets(market, delivery_dates), forecasts)
-    return with_actuals(selected, actuals).sort("start_time")
+    selected = forecast_as_of(delivery_targets(market, delivery_dates, HOUR), forecasts, "forecast_mw")
+    demand = gate_closure_demand(market, delivery_dates, demand_forecasts)
+    return with_demand(with_actuals(selected, actuals), demand, demand_actuals).sort("start_time")
 
 
 def forecast_bucket(edges: list[float]) -> pl.Expr:
@@ -98,6 +110,7 @@ def with_quality(hours: pl.DataFrame, latest_run_utc: datetime | None) -> pl.Dat
         (source < pl.lit(latest_run_utc, TIMESTAMP)).fill_null(False).alias(QualityFlag.FALLBACK_RUN),
         pl.col("forecast_mw").is_null().alias(QualityFlag.NO_FORECAST),
         pl.col("actual_mw").is_null().alias(QualityFlag.NO_ACTUAL),
+        pl.col("demand_forecast_mw").is_null().alias(QualityFlag.NO_DEMAND_FORECAST),
     )
 
 
@@ -112,7 +125,7 @@ def evaluate_day(
     latest_run_utc = latest_run(forecasts, gate_closure_utc(market, delivery_date))
     band = calibration_band(gate_hours, delivery_date, band_quantiles, band_buckets)
     day_hours = gate_hours.filter(pl.col("delivery_date") == delivery_date)
-    hours = with_quality(with_band(day_hours, band), latest_run_utc)
+    hours = with_quality(with_net_demand(with_band(day_hours, band)), latest_run_utc)
     return DayEvaluation(delivery_date, latest_run_utc, band.calibration_days, hours)
 
 
@@ -132,6 +145,11 @@ def day_summary(evaluation: DayEvaluation) -> DaySummary:
         gwh("forecast_mw").alias("expected_gwh"),
         gwh("lower_mw").alias("lower_gwh"),
         gwh("actual_mw").alias("actual_gwh"),
+        gwh("demand_forecast_mw").alias("demand_forecast_gwh"),
+        gwh("demand_actual_mw").alias("demand_actual_gwh"),
+        gwh("net_demand_forecast_mw").alias("net_demand_expected_gwh"),
+        gwh("net_demand_plan_mw").alias("net_demand_plan_gwh"),
+        gwh("net_demand_actual_mw").alias("net_demand_actual_gwh"),
         ABS_ERROR.mean().alias("mae_mw"),
         ERROR.mean().alias("bias_mw"),
         pl.len().alias("hours_total"),

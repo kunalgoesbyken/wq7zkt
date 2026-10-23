@@ -1,34 +1,69 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Stat } from "@/components/stat";
 import type { Schemas } from "@/lib/api/client";
 import { biasDirection } from "@/lib/bias";
 import { useFormat } from "@/lib/format/use-format";
 
-const cell = "bg-card p-5";
+type AccuracyMetricsProps = {
+  metrics: Schemas["Metrics"];
+  basis: Schemas["Basis"];
+  horizon: number | null;
+};
 
-export function AccuracyMetrics({ metrics }: { metrics: Schemas["Metrics"] }) {
+export function AccuracyMetrics({ metrics, basis, horizon }: AccuracyMetricsProps) {
   const t = useTranslations("accuracy.metrics");
   const format = useFormat();
   const bias = biasDirection(metrics.bias_mw);
 
+  const rows = [
+    { key: "mae", value: format.mw(metrics.mae_mw) },
+    { key: "p50", value: format.mw(metrics.p50_abs_error_mw) },
+    { key: "p90", value: format.mw(metrics.p90_abs_error_mw) },
+    { key: "rmse", value: format.mw(metrics.rmse_mw) },
+    { key: "nmae", value: format.percent(metrics.nmae_pct) },
+    { key: "bias", value: format.signedMw(metrics.bias_mw) },
+  ] as const;
+
   return (
-    <section aria-label={t("title")} className="overflow-hidden rounded-xl ring-1 ring-foreground/10">
-      <dl className="grid grid-cols-2 gap-px bg-border sm:grid-cols-3 xl:grid-cols-6">
-        <Stat className={cell} label={t("mae")} value={format.mw(metrics.mae_mw)} caption={t("maeCaption")} />
-        <Stat className={cell} label={t("rmse")} value={format.mw(metrics.rmse_mw)} caption={t("rmseCaption")} />
-        <Stat
-          className={cell}
-          label={t("bias")}
-          value={format.signedMw(metrics.bias_mw)}
-          tone={bias === "over" ? "risk" : "default"}
-          caption={t(`biasCaption.${bias}`)}
-        />
-        <Stat className={cell} label={t("p50")} value={format.mw(metrics.p50_abs_error_mw)} caption={t("p50Caption")} />
-        <Stat className={cell} label={t("p90")} value={format.mw(metrics.p90_abs_error_mw)} caption={t("p90Caption")} />
-        <Stat className={cell} label={t("nmae")} value={format.percent(metrics.nmae_pct)} caption={t("nmaeCaption")} />
-      </dl>
+    <section aria-labelledby="accuracy-summary" className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16">
+      <div className="flex flex-col gap-3">
+        <h2 id="accuracy-summary" className="sr-only">
+          {t("title")}
+        </h2>
+        <p className="max-w-[40ch] text-[1.375rem] leading-snug tracking-tight text-pretty">
+          {t.rich(`headline.${basis}`, {
+            hours: horizon ?? 0,
+            mae: format.mw(metrics.mae_mw),
+            share: format.percent(metrics.nmae_pct),
+            figure: (chunks) => <strong className="figures font-semibold whitespace-nowrap">{chunks}</strong>,
+          })}
+        </p>
+        <p className="max-w-[48ch] text-base leading-relaxed text-pretty text-muted-foreground">
+          {t(`biasSentence.${bias}`, { bias: format.mw(Math.abs(metrics.bias_mw ?? 0)) })}
+        </p>
+      </div>
+      <table className="w-full text-sm">
+        <caption className="sr-only">{t("title")}</caption>
+        <thead className="sr-only">
+          <tr>
+            <th scope="col">{t("measure")}</th>
+            <th scope="col">{t("value")}</th>
+            <th scope="col">{t("meaning")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(({ key, value }) => (
+            <tr key={key} className="border-b align-baseline">
+              <th scope="row" className="py-2.5 pr-4 text-left font-normal text-muted-foreground">
+                {t(`${key}.label`)}
+              </th>
+              <td className="figures py-2.5 pr-6 text-right font-medium whitespace-nowrap">{value}</td>
+              <td className="hidden py-2.5 leading-snug text-muted-foreground sm:table-cell">{t(`${key}.meaning`)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </section>
   );
 }

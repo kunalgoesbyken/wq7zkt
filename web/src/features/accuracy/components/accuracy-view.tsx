@@ -39,9 +39,10 @@ export function AccuracyView() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <PageIntro title={t("title")} description={t("intro")} />
-      <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-6">
+        <PageIntro title={t("title")} description={t("intro")} />
+        <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
           <BasisToggle value={activeBasis} onChange={(nextBasis) => setParams({ basis: nextBasis })} />
           {activeBasis === "gate_closure" ? (
@@ -57,8 +58,11 @@ export function AccuracyView() {
           )}
         </div>
         <p className="text-sm text-muted-foreground">{t(`basisHint.${activeBasis}`)}</p>
+        </div>
       </div>
-      <AccuracyReportSection query={query} timeZone={meta.reporting_timezone} />
+      <div className="border-t pt-10">
+        <AccuracyReportSection query={query} timeZone={meta.reporting_timezone} />
+      </div>
     </div>
   );
 }

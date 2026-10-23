@@ -5,7 +5,7 @@ import polars as pl
 
 from windesk.analytics.accuracy import accuracy_report, horizon_hours, local_day_hours
 from windesk.analytics.accuracy import horizon_curve as horizon_points
-from windesk.analytics.alignment import hourly_actuals
+from windesk.analytics.alignment import demand_errors, hourly_mean
 from windesk.analytics.decision import (
     DayEvaluation,
     band_coverage,
@@ -56,7 +56,9 @@ class Desk:
         self.catalog = catalog
         self.manifest = store.manifest()
         self.forecasts = store.forecasts()
-        self.actuals = hourly_actuals(store.actuals())
+        self.actuals = hourly_mean(store.actuals(), "value_mw", "actual_mw")
+        self.demand_forecasts = store.demand_forecasts()
+        self.demand_actuals = hourly_mean(store.demand_actuals(), "value_mw", "demand_actual_mw")
         self.auction_window = DateWindow(start=settings.auction_start, end=settings.auction_end)
         self.gate_closure_hours = cache(self._gate_closure_hours)
         self.evaluation = cache(self._evaluation)
@@ -78,7 +80,9 @@ class Desk:
 
     def _gate_closure_hours(self, market: Market) -> pl.DataFrame:
         dates = window_dates(self.delivery_window(market))
-        return gate_closure_hours(market, dates, self.forecasts, self.actuals)
+        return gate_closure_hours(
+            market, dates, self.forecasts, self.actuals, self.demand_forecasts, self.demand_actuals
+        )
 
     def _evaluation(self, market: Market, delivery_date: date) -> DayEvaluation:
         gate_hours = self.gate_closure_hours(market)
@@ -95,6 +99,8 @@ class Desk:
         return MetaResponse(
             actuals_dataset=self.settings.actuals_dataset,
             forecasts_dataset=self.settings.forecasts_dataset,
+            demand_actuals_dataset=self.settings.demand_actuals_dataset,
+            demand_forecasts_dataset=self.settings.demand_forecasts_dataset,
             fuel_type=self.settings.fuel_type,
             auction_window=self.auction_window,
             delivery_window=self.target_window,
@@ -113,6 +119,7 @@ class Desk:
         return DecisionCalendar(
             market_id=market.id,
             metrics=metrics(hours),
+            demand_metrics=metrics(demand_errors(hours)),
             band_coverage=band_coverage(evaluations),
             days=[day_summary(evaluation) for evaluation in evaluations],
         )

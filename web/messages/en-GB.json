@@ -2,32 +2,18 @@
   "metadata": {
     "title": "Windward",
     "titleTemplate": "%s | Windward",
-    "description": "GB wind decision desk for day-ahead power trading: the national wind forecast available at gate closure, with its error quantified."
+    "description": "What the GB wind forecast said before each day-ahead auction closed, how far to trust it, and how much demand was left for other sources."
   },
   "header": {
     "product": "Windward",
-    "tagline": "GB wind decision desk",
+    "tagline": "GB wind forecasts for day-ahead buying",
     "toggleTheme": "Switch between light and dark theme"
   },
   "nav": {
     "label": "Main",
-    "decision": "Decision desk",
+    "decision": "Day ahead",
     "accuracy": "Accuracy",
-    "methodology": "Methodology"
-  },
-  "dataStatus": {
-    "title": "Data status",
-    "unavailable": "Data service unavailable",
-    "summary": "Elexon data, ingested {date}",
-    "sources": "Actuals from {actuals} ({fuel}), forecasts from {forecasts}, both published by Elexon.",
-    "actuals": "Actuals",
-    "range": "{from} to {to}",
-    "missingPeriods": "Missing half-hours",
-    "missingValue": "{missing} of {total}",
-    "forecastRuns": "Forecast runs",
-    "runsValue": "{count} runs, {from} to {to}",
-    "ingestedAt": "Ingested",
-    "timeZone": "Times shown in"
+    "methodology": "How it works"
   },
   "units": {
     "missing": "–",
@@ -41,247 +27,303 @@
   },
   "controls": {
     "market": "Market",
-    "marketOption": "{venue}, gate closure {time}",
+    "marketOption": "{venue}, bids close at {time}",
     "deliveryDay": "Delivery day",
     "previousDay": "Previous delivery day",
     "nextDay": "Next delivery day",
-    "basis": "Forecast basis",
-    "horizon": "Lead time",
-    "horizonValue": "{hours} h before delivery"
+    "basis": "Compare against",
+    "horizon": "Hours ahead",
+    "horizonValue": "{hours} hours before delivery"
   },
   "flags": {
-    "none": "No quality flags",
+    "none": "No gaps",
     "FALLBACK_RUN": {
-      "label": "Older run",
-      "description": "The latest run before gate closure did not cover this hour, so the value comes from an earlier run."
+      "label": "Older forecast used",
+      "description": "The newest forecast before the deadline didn't cover this hour, so an earlier one was used."
     },
     "NO_FORECAST": {
-      "label": "No forecast",
-      "description": "No forecast for this hour was published before gate closure."
+      "label": "Missing wind forecast",
+      "description": "No wind forecast for this hour was published before the deadline."
+    },
+    "NO_DEMAND_FORECAST": {
+      "label": "Missing demand forecast",
+      "description": "No demand forecast for this hour was published before the deadline."
     },
     "NO_ACTUAL": {
-      "label": "No actual",
-      "description": "Metered output is missing or incomplete for this hour, so its error cannot be measured."
+      "label": "Missing actual",
+      "description": "Metered wind output is missing for this hour, so its miss can't be measured."
     },
     "PARTIAL_COVERAGE": {
-      "label": "Partial day",
-      "description": "Some hours of the delivery day have no forecast or no actual, so daily totals cover fewer than all hours."
+      "label": "Part of the day missing",
+      "description": "Some hours have no forecast or no actual, so the day's totals cover fewer than all hours."
     }
   },
   "states": {
     "error": {
       "retry": "Try again",
       "network": {
-        "title": "The forecast service could not be reached",
-        "description": "Check your connection, then try again. Nothing on this page has changed."
+        "title": "Couldn't reach the forecast service",
+        "description": "Check your connection, then try again."
       },
       "server": {
         "title": "The forecast service returned an error",
-        "description": "The data could not be prepared. Try again; if it keeps failing, the data team can check the service logs."
+        "description": "Try again. If it keeps failing, the service logs will show why."
       },
       "request": {
-        "title": "This view could not be loaded",
-        "description": "The selected market, date or setting is not available. Pick another one, or try again."
+        "title": "This view isn't available",
+        "description": "The selected market, date or setting is outside the pilot. Pick another one."
       }
     }
   },
   "decision": {
-    "title": "Decision desk",
-    "intro": "The latest national wind forecast that was available at the auction deadline, with the uncertainty you should plan around and, in hindsight, how it turned out.",
+    "title": "Day-ahead wind",
+    "intro": "For each delivery day in the pilot: what the wind forecast said before bids closed, a safer figure to plan on, and how much demand that leaves for other sources.",
     "empty": {
-      "title": "No forecast was available at gate closure",
-      "description": "No forecast run covering this delivery day was published before the deadline. Choose another day or market."
+      "title": "No wind forecast was available before bids closed",
+      "description": "No forecast covering this delivery day was published before the deadline. Choose another day or market."
     },
-    "headline": {
-      "title": "Volume to plan on",
-      "planOn": "Plan on",
-      "not": "not",
-      "firmCaption": "Actual wind met or beat this level in {held} of {hours, number} pilot hours, against a {target} target",
-      "expectedCaption": "Expected wind output from the forecast",
-      "atRisk": "<figure>{amount}</figure> at risk, {share} of the expected volume",
-      "barLabel": "Firm volume, volume at risk and delivered volume for the day",
-      "legendFirm": "Firm",
-      "legendRisk": "At risk",
-      "legendActual": "Delivered {amount}",
-      "firmTarget": "Set so that actual wind beats it in about {target} of hours"
+    "briefing": {
+      "title": "Summary for the day",
+      "context": "Bids on {venue} closed at {gateTime} on {gateDate}. The newest wind forecast at that moment was published at {runTime}.",
+      "wind": "Wind was forecast to produce <wind>{amount}</wind> over the day.",
+      "firm": "A safer figure to plan on was <wind>{amount}</wind>. Across the pilot, actual wind reached this level in {held} of hours.",
+      "demand": "Demand was forecast at <figure>{demand}</figure>. After wind, about <figure>{other}</figure> had to come from other sources such as gas, nuclear and imports, or up to <figure>{otherPlan}</figure> if wind only reached the safer figure."
     },
-    "facts": {
-      "gateClosure": "Gate closure",
-      "gateClosureCaption": "{date}, {venue}",
-      "forecastRun": "Forecast run used",
-      "forecastRunCaption": "Published {age} before gate closure",
-      "noRun": "No run before gate closure",
-      "coverage": "Hours forecast",
-      "coverageValue": "{forecast} of {total}",
-      "mae": "Error in hindsight",
-      "maeCaption": "Mean absolute error; {actual} delivered",
-      "bias": "Bias",
-      "biasCaption": {
-        "over": "Over-forecast: buying on it left you short",
-        "under": "Under-forecast: buying on it left you long",
-        "neutral": "No systematic error"
+    "split": {
+      "label": "How the day's forecast demand splits between wind and other sources",
+      "firm": "Wind you can plan on",
+      "risk": "Wind that may not arrive",
+      "other": "Other sources",
+      "amount": "{amount}, {share} of demand"
+    },
+    "outcome": {
+      "title": "How it turned out",
+      "pending": "Metered results for this day aren't available yet.",
+      "wind": {
+        "less": "Wind delivered {actual}, {gap} less than forecast.",
+        "more": "Wind delivered {actual}, {gap} more than forecast."
       },
-      "calibration": "Band calibration",
-      "calibrationValue": "{days, plural, one {# day} other {# days}}",
-      "calibrationCaption": "Errors from the other pilot days, excluding this one"
+      "firm": {
+        "above": "That was above the safer figure.",
+        "below": "That was below even the safer figure: one of the low days the range warns about."
+      },
+      "demand": "Demand was {demand}, so other sources covered {other}."
+    },
+    "details": {
+      "title": "Details",
+      "deadline": "Bids closed",
+      "deadlineValue": "{time}, {date}",
+      "forecastUsed": "Forecast used",
+      "forecastUsedValue": "Published at {time}",
+      "forecastUsedNote": "{age} before bids closed",
+      "noRun": "None before bids closed",
+      "hours": "Hours covered",
+      "hoursValue": "{forecast} of {total}",
+      "miss": "Typical hourly miss",
+      "missNote": "Average gap between forecast and actual wind",
+      "bias": "Average error",
+      "biasNote": {
+        "over": "Forecast too high, so planning on it left you short",
+        "under": "Forecast too low, so planning on it left you long",
+        "neutral": "No lean either way"
+      },
+      "range": "Range based on",
+      "rangeValue": "{days, plural, one {# other day} other {# other days}}",
+      "rangeNote": "This day is left out, so it can't shape its own range"
     },
     "chart": {
-      "title": "Hourly wind output across the delivery day",
-      "description": "Delivery from {start} to {end}, times in {timeZone}",
-      "forecast": "Forecast at gate closure",
+      "title": "Wind, hour by hour",
+      "description": "The forecast at the deadline, its likely range and what actually happened, from {start} to {end}.",
+      "forecast": "Forecast",
       "actual": "Actual",
-      "band": "Range P{low} to P{high}",
-      "lower": "Firm level",
-      "fallback": "From an older run",
+      "band": "Likely range (P{low} to P{high})",
+      "lower": "Safer figure",
+      "fallback": "From an older forecast",
       "hourRange": "{start} to {end}",
       "bandRange": "{lower} to {upper}",
-      "error": "Error",
-      "sourceRun": "Source run",
-      "age": "Forecast age",
-      "flagsNote": "Flags: {flags}",
-      "ariaLabel": "Line chart of the hourly wind forecast at gate closure with its uncertainty range, compared with metered output"
+      "error": "Miss",
+      "sourceRun": "Forecast published",
+      "age": "Made this far ahead",
+      "flagsNote": "Note: {flags}",
+      "ariaLabel": "Line chart of the hourly wind forecast at the deadline with its likely range, compared with actual output"
+    },
+    "demandChart": {
+      "title": "Demand, hour by hour",
+      "description": "Forecast demand split into the wind you can plan on, the wind that may not arrive and what other sources must cover. The dashed line is actual demand.",
+      "firm": "Wind you can plan on",
+      "risk": "Wind that may not arrive",
+      "other": "Other sources",
+      "actualDemand": "Actual demand",
+      "demandForecast": "Demand forecast",
+      "windForecast": "Wind forecast",
+      "otherIfLow": "Other sources if wind is low",
+      "actualOther": "Other sources, actual",
+      "hourRange": "{start} to {end}",
+      "ariaLabel": "Stacked area chart of forecast demand split into planned wind, wind at risk and other sources, with actual demand"
     },
     "month": {
-      "title": "Delivery days by forecast error",
-      "description": "Each day shaded by its mean absolute error. Across {days} days: error {mae}, bias {bias}. Select a day to open it.",
-      "dayLabel": "{date}, mean absolute error {mae}",
-      "noActuals": "Not yet measurable"
+      "title": "Every delivery day in the pilot",
+      "description": "Each day is shaded by how far the wind forecast missed. Select a day to open it.",
+      "totals": "Over {days} days, the forecast at the deadline added up to {forecast} of wind, and {actual} arrived.",
+      "bias": {
+        "over": "On average it was {bias} too high per hour, so buyers who planned on it were left short.",
+        "under": "On average it was {bias} too low per hour, so buyers who planned on it were left long.",
+        "neutral": "It didn't lean high or low."
+      },
+      "miss": "A typical hourly miss was {mae} for wind and {demandMae} for demand.",
+      "dayLabel": "{date}, typical miss {mae}",
+      "smallerMiss": "Smaller miss",
+      "biggerMiss": "Bigger miss",
+      "noActuals": "Not measured yet"
     }
   },
   "accuracy": {
-    "title": "Forecast accuracy",
-    "intro": "How far the forecast was from metered output over the pilot window, either at a fixed lead time or exactly as a trader saw it at gate closure.",
+    "title": "How accurate is the wind forecast?",
+    "intro": "How far the forecast was from what wind actually produced across the pilot, either at the bidding deadline or a set number of hours before delivery.",
     "basis": {
-      "horizon": "Fixed lead time",
-      "gate_closure": "At gate closure"
+      "horizon": "Hours ahead",
+      "gate_closure": "Bidding deadline"
     },
     "basisHint": {
       "horizon": "Each hour is compared with the forecast published that many hours before it.",
-      "gate_closure": "Each hour is compared with the forecast available at the selected market's gate closure."
+      "gate_closure": "Each hour is compared with the forecast a buyer had when bids closed on the selected market."
     },
     "window": "{start} to {end}, {hours} hours compared, times in {timeZone}",
     "metrics": {
-      "title": "Error summary",
-      "mae": "Mean absolute error",
-      "maeCaption": "Typical size of a miss",
-      "rmse": "Root mean square error",
-      "rmseCaption": "Weights large misses more",
-      "bias": "Bias",
-      "biasCaption": {
-        "over": "Over-forecast on average",
-        "under": "Under-forecast on average",
-        "neutral": "No systematic error"
+      "title": "Accuracy summary",
+      "measure": "Measure",
+      "value": "Value",
+      "meaning": "What it means",
+      "headline": {
+        "gate_closure": "At the bidding deadline, the forecast missed by <figure>{mae}</figure> in a typical hour, about <figure>{share}</figure> of average wind output.",
+        "horizon": "Made {hours} hours ahead, the forecast missed by <figure>{mae}</figure> in a typical hour, about <figure>{share}</figure> of average wind output."
       },
-      "p50": "Median miss",
-      "p50Caption": "Half of hours missed by less",
-      "p90": "90th percentile miss",
-      "p90Caption": "Nine in ten hours missed by less",
-      "nmae": "Normalised error",
-      "nmaeCaption": "Mean absolute error relative to mean output"
+      "biasSentence": {
+        "over": "It leaned high: on average {bias} more wind was forecast than arrived.",
+        "under": "It leaned low: on average {bias} less wind was forecast than arrived.",
+        "neutral": "It didn't lean high or low on average."
+      },
+      "mae": { "label": "Typical miss", "meaning": "Average size of the gap, ignoring direction" },
+      "p50": { "label": "Half of hours missed by less than", "meaning": "The middle of the misses" },
+      "p90": { "label": "Nine in ten hours missed by less than", "meaning": "How bad a bad hour gets" },
+      "rmse": { "label": "Root mean square error", "meaning": "Like the typical miss, but big misses count more" },
+      "nmae": { "label": "Miss as a share of output", "meaning": "Typical miss divided by average wind output" },
+      "bias": { "label": "Average error", "meaning": "Positive means the forecast was too high" }
     },
     "series": {
       "title": "Forecast against actual",
       "forecast": "Forecast",
       "actual": "Actual",
-      "error": "Error",
-      "ariaLabel": "Line chart comparing the hourly wind forecast with metered output across the window"
+      "error": "Miss",
+      "ariaLabel": "Line chart comparing the hourly wind forecast with actual output across the pilot"
     },
     "horizonCurve": {
-      "title": "Error by lead time",
-      "description": "How the error grows as the forecast is made further ahead",
-      "mae": "Mean absolute error",
-      "bias": "Bias",
+      "title": "Misses grow the further ahead you look",
+      "description": "Typical miss and average error by how many hours ahead the forecast was made",
+      "mae": "Typical miss",
+      "bias": "Average error",
       "rmse": "Root mean square error",
-      "p90": "90th percentile miss",
+      "p90": "Nine in ten hours missed by less than",
       "hours": "Hours compared",
-      "selected": "Selected lead time",
+      "selected": "Selected",
       "axis": "Hours ahead",
-      "ariaLabel": "Line chart of mean absolute error and bias against forecast lead time"
+      "ariaLabel": "Line chart of the typical miss and average error against how far ahead the forecast was made"
     },
     "histogram": {
-      "title": "Distribution of errors",
-      "description": "Positive errors are over-forecasts, which leave a buyer short",
-      "over": "Over-forecast",
-      "under": "Under-forecast",
+      "title": "How big the misses were",
+      "description": "Right of zero, the forecast was too high and a buyer would be short",
+      "over": "Too high",
+      "under": "Too low",
       "range": "{lower} to {upper}",
       "hours": "Hours",
       "share": "Share of hours",
-      "ariaLabel": "Histogram of hourly forecast errors"
+      "ariaLabel": "Histogram of hourly forecast misses"
     },
     "byHour": {
-      "title": "Error by hour of day",
-      "description": "Hours in {timeZone}",
-      "mae": "Mean absolute error",
-      "bias": "Bias",
+      "title": "Misses by time of day",
+      "description": "Times in {timeZone}",
+      "mae": "Typical miss",
+      "bias": "Average error",
       "hours": "Hours compared",
-      "ariaLabel": "Bar chart of mean absolute error and bias for each hour of the day"
+      "ariaLabel": "Bar chart of the typical miss and average error for each hour of the day"
     },
     "empty": {
-      "title": "No hours to compare",
-      "description": "No hour in the window has both a forecast and a metered actual for this setting. Try another lead time or market."
+      "title": "Nothing to compare",
+      "description": "No hour has both a forecast and an actual for this setting. Try another number of hours or market."
     }
   },
   "methodology": {
-    "title": "Methodology",
-    "intro": "How Windward turns Elexon's published wind data into a decision view and an accuracy record, and where its limits are.",
-    "contents": "On this page",
+    "title": "How it works",
+    "intro": "Every number in Windward comes from data Elexon publishes. These are the steps that turn it into the figures on the other pages, and the limits to keep in mind.",
     "scope": {
-      "title": "Scope of this pilot",
+      "title": "What the pilot covers",
       "auctionWindow": "Auction dates",
       "deliveryWindow": "Delivery days",
-      "datasets": "Datasets",
-      "datasetsValue": "{actuals} ({fuel}) and {forecasts}",
-      "band": "Uncertainty range",
-      "bandValue": "P{low} to P{high}",
-      "markets": "Gate closures",
-      "marketValue": "{venue} at {time}, {timeZone}"
+      "markets": "Bidding deadlines",
+      "marketValue": "{venue} at {time}, {timeZone}",
+      "wind": "Wind data",
+      "windValue": "Forecasts from {forecasts}, actuals from {actuals}",
+      "demand": "Demand data",
+      "demandValue": "Forecasts from {forecasts}, actuals from {actuals}",
+      "band": "Likely range",
+      "bandValue": "P{low} to P{high}"
     },
+    "stepsTitle": "From raw data to the figures",
     "sources": {
-      "title": "Data sources",
+      "title": "Collect what Elexon published",
       "body": [
-        "Actual output comes from Elexon's FUELHH dataset, filtered to the WIND fuel type: metered generation from transmission-connected wind farms for every half-hour settlement period.",
-        "Forecasts come from Elexon's WINDFOR dataset: national wind generation forecasts published several times a day, each run covering roughly the next two days. Every run is kept with its publish time, so the forecast that was available at any moment can be reconstructed."
+        "Wind forecasts come from WINDFOR. Forecasts are published about eight times a day, each looking up to two days ahead, and every one is kept with the time it was published.",
+        "Actual wind comes from FUELHH: metered output of wind farms connected to the transmission network, for every half-hour.",
+        "Demand forecasts come from NDF, the national demand forecast, which is updated roughly every half-hour. Actual demand comes from INDO. Both use the same definition of national demand.",
+        "Rows that are duplicated, negative or published after the hour they describe are dropped, and gaps are counted rather than filled."
       ]
     },
     "alignment": {
-      "title": "Aligning forecasts with actuals",
+      "title": "Line up the hours",
       "body": [
-        "Forecasts are hourly while actuals are half-hourly. Each hour's actual is the mean of its two half-hours, so both sides describe the same average power over the same hour.",
-        "An hour with only one of its two half-hours present is treated as incomplete and excluded from every error statistic rather than estimated."
-      ],
-      "sensitivity": "Comparing only the half-hour that starts on the hour would lower the January gate-closure mean absolute error by about 18 MW, under 1%, so the alignment choice does not drive the results."
+        "Wind forecasts are hourly, but actuals and demand data are half-hourly. Each hour's value is the average of its two half-hours, which matches the hourly blocks bought in the auction.",
+        "If either half-hour is missing, the whole hour is left out instead of guessed. Using only the half-hour that starts on the hour would change the January typical miss by about 18 MW, under 1%, so this choice doesn't drive the results."
+      ]
     },
     "selection": {
-      "title": "Which forecast a trader actually had",
+      "title": "Pick the forecast a buyer actually had",
       "body": [
-        "Day-ahead power for GB is bought in auctions that close the morning before delivery, and each market has its own gate closure, listed under Scope of this pilot. For every delivery hour, Windward selects the latest forecast published before the chosen market's gate closure.",
-        "Forecast runs are published several times a day, so a run can land between two markets' deadlines. When that happens, buyers on different markets really had different forecasts; the decision desk shows which run each market had.",
-        "When the latest run before the deadline does not cover an hour, the value comes from the most recent earlier run that does, and the hour is flagged as coming from an older run."
+        "Day-ahead power is bought in auctions that close the morning before delivery. For every delivery hour, Windward takes the newest forecast published before the chosen market's deadline, not a later one that buyers couldn't have seen.",
+        "New forecasts can land between two markets' deadlines, so buyers on different markets sometimes had different forecasts. The day-ahead page shows which forecast each market had.",
+        "If the newest forecast didn't cover an hour, the next newest one that did is used, and the hour is marked."
+      ]
+    },
+    "errors": {
+      "title": "Measure the misses",
+      "body": [
+        "For each hour, the miss is the forecast minus what actually arrived. A positive miss means the forecast was too high, so a buyer who planned on it bought too little and had to make up the shortfall at balancing prices.",
+        "The typical miss is the average size of those gaps, ignoring direction. The average error keeps the direction, so it shows whether the forecast leaned high or low."
       ]
     },
     "band": {
-      "title": "Uncertainty range and energy at risk",
+      "title": "Work out a safer figure",
       "body": [
-        "The range around each forecast comes from the errors of comparable forecasts on the other pilot days. Hours are grouped by forecast level, because errors grow as wind output rises, and each group's range is the observed spread of its errors.",
-        "The edges use a finite-sample (conformal) correction, so a small calibration set does not make the range look tighter than it is. The lower edge is the level actual wind is expected to beat about nine times in ten: plan on that, not on the expected value. The decision desk reports how often it actually held across the pilot.",
-        "Energy at risk is the expected daily volume minus the firm daily volume. It is the amount a buyer relying on the forecast may have to cover in balancing.",
-        "Calibration leaves the day being assessed out of its own range, so the range is never fitted to the outcome it is judged against."
+        "Wind misses are bigger when the forecast is high, so hours are sorted into three groups by forecast level. Within each group, Windward looks at how actual wind differed from the forecast on every other pilot day.",
+        "The likely range runs from the 10th to the 90th percentile of those differences, with a small-sample correction so a short history doesn't make the range look tighter than it is. The bottom of the range is the safer figure: actual wind should beat it in about nine hours out of ten.",
+        "The day being shown is always left out of its own range, so the check isn't rigged. The day-ahead page reports how often the safer figure actually held across the pilot.",
+        "Wind that may not arrive is the forecast minus the safer figure, added up over the day."
       ]
     },
-    "sign": {
-      "title": "Error sign convention",
+    "demand": {
+      "title": "Add demand",
       "body": [
-        "Error is forecast minus actual. A positive error, or a positive bias, means the forecast was too high: a buyer who planned on it bought too little and ends up short, paying balancing prices for the difference.",
-        "A negative error means the forecast was too low and the buyer ends up long."
+        "The demand forecast is picked the same way as the wind forecast: the newest one published before the deadline, for each half-hour, averaged into hours.",
+        "Demand minus wind is what other sources such as gas, nuclear and imports must cover. Windward shows it twice: using the wind forecast, and using the safer figure, which is the amount to cover if wind comes in low.",
+        "This is national demand, not any one supplier's customers. Windward doesn't recommend a purchase volume. A supplier's own demand forecast could replace the national figure to make one."
       ]
     },
     "caveats": {
-      "title": "Caveats",
+      "title": "Limits to keep in mind",
       "body": [
-        "The pilot covers one winter month. Error statistics from a single month describe that month's weather and may not hold in other seasons.",
-        "FUELHH and WINDFOR describe transmission-connected wind only. Embedded wind on distribution networks appears as reduced demand and is outside this view.",
-        "The uncertainty range is calibrated on the days in the pilot window, so it inherits their weather regime and sample size.",
-        "Hours missing a forecast or an actual are excluded from statistics and flagged, never filled in."
+        "The pilot covers one winter month. Its errors reflect that month's weather and may not hold in other seasons.",
+        "The data covers wind farms on the transmission network. Smaller wind farms on local networks show up as lower demand instead.",
+        "The likely range only reflects wind uncertainty. Demand forecast misses are reported separately and are not added to it.",
+        "The forecast ran high for most of January. One possible cause is wind farms being paid to turn down when the grid is congested, but that hasn't been checked here."
       ]
     }
   }

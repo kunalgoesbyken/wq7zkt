@@ -11,6 +11,8 @@ const seriesTokens = {
   actual: "var(--actual)",
   risk: "var(--risk)",
   long: "var(--long)",
+  demand: "var(--demand)",
+  other: "var(--other)",
 } as const;
 
 export type SeriesKey = keyof typeof seriesTokens;

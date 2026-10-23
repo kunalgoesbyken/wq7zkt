@@ -33,7 +33,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <NextIntlClientProvider>
           <Providers>
             <AppHeader />
-            <main className="mx-auto w-full max-w-[90rem] flex-1 px-4 pt-6 pb-16 sm:px-6 lg:px-10">{children}</main>
+            <main className="mx-auto w-full max-w-[76rem] flex-1 px-4 pt-8 pb-20 sm:px-6 lg:px-10">{children}</main>
           </Providers>
         </NextIntlClientProvider>
       </body>
