@@ -126,7 +126,3 @@ Each push to `master` triggers a deploy.
   - View state lives in the URL, so views can be shared between users.
   - The API returns only numbers, ISO timestamps and enum codes, so all wording is localised in one catalog.
 - **Data quality is visible.** Ingest validates the schema, removes duplicates and hindcasts, and reports gaps. The API exposes coverage through `/meta`.
-
-## Use of AI tools
-
-This project was built with the help of AI coding assistants for research, implementation and review. All design decisions, methodology choices and figures were checked against the source data.
