@@ -1,0 +1,26 @@
+[project]
+name = "windesk-api"
+version = "1.0.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.118",
+    "polars>=1.30",
+    "pydantic-settings>=2.10",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28",
+    "ruff>=0.13",
+    "uvicorn[standard]>=0.37",
+]
+
+[tool.vercel]
+entrypoint = "windesk.main:app"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]

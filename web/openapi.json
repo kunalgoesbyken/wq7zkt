@@ -1,0 +1,1303 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Wind Decision Desk API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Api V1 Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/meta": {
+      "get": {
+        "summary": "Meta",
+        "operationId": "meta_api_v1_meta_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/markets": {
+      "get": {
+        "summary": "Markets",
+        "operationId": "markets_api_v1_markets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/decisions": {
+      "get": {
+        "summary": "Decision Calendar",
+        "operationId": "decision_calendar_api_v1_decisions_get",
+        "parameters": [
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Market"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionCalendar"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/decisions/{delivery_date}": {
+      "get": {
+        "summary": "Decision Day",
+        "operationId": "decision_day_api_v1_decisions__delivery_date__get",
+        "parameters": [
+          {
+            "name": "delivery_date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Delivery Date"
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Market"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionDay"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accuracy": {
+      "get": {
+        "summary": "Accuracy",
+        "operationId": "accuracy_api_v1_accuracy_get",
+        "parameters": [
+          {
+            "name": "basis",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Basis",
+              "default": "horizon"
+            }
+          },
+          {
+            "name": "horizon_h",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 48,
+              "minimum": 0,
+              "default": 24,
+              "title": "Horizon H"
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Market"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccuracyReport"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accuracy/horizon-curve": {
+      "get": {
+        "summary": "Horizon Curve",
+        "operationId": "horizon_curve_api_v1_accuracy_horizon_curve_get",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HorizonCurve"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccuracyPoint": {
+        "properties": {
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Time"
+          },
+          "forecast_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forecast Mw"
+          },
+          "actual_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Mw"
+          },
+          "error_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Mw"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_time",
+          "forecast_mw",
+          "actual_mw",
+          "error_mw"
+        ],
+        "title": "AccuracyPoint"
+      },
+      "AccuracyReport": {
+        "properties": {
+          "basis": {
+            "$ref": "#/components/schemas/Basis"
+          },
+          "horizon_h": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Horizon H"
+          },
+          "market_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Market Id"
+          },
+          "window": {
+            "$ref": "#/components/schemas/DateWindow"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/Metrics"
+          },
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/AccuracyPoint"
+            },
+            "type": "array",
+            "title": "Series"
+          },
+          "histogram": {
+            "items": {
+              "$ref": "#/components/schemas/HistogramBin"
+            },
+            "type": "array",
+            "title": "Histogram"
+          },
+          "by_hour": {
+            "items": {
+              "$ref": "#/components/schemas/HourOfDayStat"
+            },
+            "type": "array",
+            "title": "By Hour"
+          }
+        },
+        "type": "object",
+        "required": [
+          "basis",
+          "horizon_h",
+          "market_id",
+          "window",
+          "metrics",
+          "series",
+          "histogram",
+          "by_hour"
+        ],
+        "title": "AccuracyReport"
+      },
+      "Basis": {
+        "type": "string",
+        "enum": [
+          "horizon",
+          "gate_closure"
+        ],
+        "title": "Basis"
+      },
+      "Coverage": {
+        "properties": {
+          "actuals_from": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Actuals From"
+          },
+          "actuals_to": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Actuals To"
+          },
+          "actual_periods": {
+            "type": "integer",
+            "title": "Actual Periods"
+          },
+          "missing_actual_periods": {
+            "type": "integer",
+            "title": "Missing Actual Periods"
+          },
+          "forecast_runs": {
+            "type": "integer",
+            "title": "Forecast Runs"
+          },
+          "forecast_runs_from": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Forecast Runs From"
+          },
+          "forecast_runs_to": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Forecast Runs To"
+          }
+        },
+        "type": "object",
+        "required": [
+          "actuals_from",
+          "actuals_to",
+          "actual_periods",
+          "missing_actual_periods",
+          "forecast_runs",
+          "forecast_runs_from",
+          "forecast_runs_to"
+        ],
+        "title": "Coverage"
+      },
+      "DateWindow": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end"
+        ],
+        "title": "DateWindow"
+      },
+      "DaySummary": {
+        "properties": {
+          "delivery_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Delivery Date"
+          },
+          "expected_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Gwh"
+          },
+          "lower_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lower Gwh"
+          },
+          "energy_at_risk_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy At Risk Gwh"
+          },
+          "actual_gwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Gwh"
+          },
+          "mae_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mae Mw"
+          },
+          "bias_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bias Mw"
+          },
+          "hours_total": {
+            "type": "integer",
+            "title": "Hours Total"
+          },
+          "hours_forecast": {
+            "type": "integer",
+            "title": "Hours Forecast"
+          },
+          "coverage_ratio": {
+            "type": "number",
+            "title": "Coverage Ratio"
+          },
+          "flags": {
+            "items": {
+              "$ref": "#/components/schemas/QualityFlag"
+            },
+            "type": "array",
+            "title": "Flags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "delivery_date",
+          "expected_gwh",
+          "lower_gwh",
+          "energy_at_risk_gwh",
+          "actual_gwh",
+          "mae_mw",
+          "bias_mw",
+          "hours_total",
+          "hours_forecast",
+          "coverage_ratio",
+          "flags"
+        ],
+        "title": "DaySummary"
+      },
+      "DecisionCalendar": {
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "title": "Market Id"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/Metrics"
+          },
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/DaySummary"
+            },
+            "type": "array",
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "market_id",
+          "metrics",
+          "days"
+        ],
+        "title": "DecisionCalendar"
+      },
+      "DecisionDay": {
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "title": "Market Id"
+          },
+          "delivery_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Delivery Date"
+          },
+          "gate_closure_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Gate Closure Utc"
+          },
+          "delivery_start_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Delivery Start Utc"
+          },
+          "delivery_end_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Delivery End Utc"
+          },
+          "latest_run_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Run Utc"
+          },
+          "calibration_days": {
+            "type": "integer",
+            "title": "Calibration Days"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/DaySummary"
+          },
+          "hours": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionHour"
+            },
+            "type": "array",
+            "title": "Hours"
+          }
+        },
+        "type": "object",
+        "required": [
+          "market_id",
+          "delivery_date",
+          "gate_closure_utc",
+          "delivery_start_utc",
+          "delivery_end_utc",
+          "latest_run_utc",
+          "calibration_days",
+          "summary",
+          "hours"
+        ],
+        "title": "DecisionDay"
+      },
+      "DecisionHour": {
+        "properties": {
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Time"
+          },
+          "forecast_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forecast Mw"
+          },
+          "actual_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Mw"
+          },
+          "error_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Mw"
+          },
+          "lower_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lower Mw"
+          },
+          "upper_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upper Mw"
+          },
+          "source_publish_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Publish Time"
+          },
+          "forecast_age_h": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forecast Age H"
+          },
+          "flags": {
+            "items": {
+              "$ref": "#/components/schemas/QualityFlag"
+            },
+            "type": "array",
+            "title": "Flags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_time",
+          "forecast_mw",
+          "actual_mw",
+          "error_mw",
+          "lower_mw",
+          "upper_mw",
+          "source_publish_time",
+          "forecast_age_h",
+          "flags"
+        ],
+        "title": "DecisionHour"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HistogramBin": {
+        "properties": {
+          "lower_mw": {
+            "type": "number",
+            "title": "Lower Mw"
+          },
+          "upper_mw": {
+            "type": "number",
+            "title": "Upper Mw"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lower_mw",
+          "upper_mw",
+          "count"
+        ],
+        "title": "HistogramBin"
+      },
+      "HorizonCurve": {
+        "properties": {
+          "window": {
+            "$ref": "#/components/schemas/DateWindow"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/HorizonPoint"
+            },
+            "type": "array",
+            "title": "Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "window",
+          "points"
+        ],
+        "title": "HorizonCurve"
+      },
+      "HorizonPoint": {
+        "properties": {
+          "horizon_h": {
+            "type": "integer",
+            "title": "Horizon H"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "mae_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mae Mw"
+          },
+          "rmse_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rmse Mw"
+          },
+          "bias_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bias Mw"
+          },
+          "p90_abs_error_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P90 Abs Error Mw"
+          }
+        },
+        "type": "object",
+        "required": [
+          "horizon_h",
+          "n",
+          "mae_mw",
+          "rmse_mw",
+          "bias_mw",
+          "p90_abs_error_mw"
+        ],
+        "title": "HorizonPoint"
+      },
+      "HourOfDayStat": {
+        "properties": {
+          "hour": {
+            "type": "integer",
+            "title": "Hour"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "mae_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mae Mw"
+          },
+          "bias_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bias Mw"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hour",
+          "n",
+          "mae_mw",
+          "bias_mw"
+        ],
+        "title": "HourOfDayStat"
+      },
+      "Market": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "venue": {
+            "type": "string",
+            "title": "Venue"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "gate_closure_local": {
+            "type": "string",
+            "title": "Gate Closure Local",
+            "examples": [
+              "09:50"
+            ]
+          },
+          "gate_closure_days_before": {
+            "type": "integer",
+            "title": "Gate Closure Days Before"
+          },
+          "delivery_start_local": {
+            "type": "string",
+            "title": "Delivery Start Local",
+            "examples": [
+              "23:00"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "venue",
+          "timezone",
+          "gate_closure_local",
+          "gate_closure_days_before",
+          "delivery_start_local"
+        ],
+        "title": "Market"
+      },
+      "MarketsResponse": {
+        "properties": {
+          "default_market_id": {
+            "type": "string",
+            "title": "Default Market Id"
+          },
+          "markets": {
+            "items": {
+              "$ref": "#/components/schemas/Market"
+            },
+            "type": "array",
+            "title": "Markets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "default_market_id",
+          "markets"
+        ],
+        "title": "MarketsResponse"
+      },
+      "MetaResponse": {
+        "properties": {
+          "actuals_dataset": {
+            "type": "string",
+            "title": "Actuals Dataset"
+          },
+          "forecasts_dataset": {
+            "type": "string",
+            "title": "Forecasts Dataset"
+          },
+          "fuel_type": {
+            "type": "string",
+            "title": "Fuel Type"
+          },
+          "auction_window": {
+            "$ref": "#/components/schemas/DateWindow"
+          },
+          "delivery_window": {
+            "$ref": "#/components/schemas/DateWindow"
+          },
+          "max_horizon_h": {
+            "type": "integer",
+            "title": "Max Horizon H"
+          },
+          "reporting_timezone": {
+            "type": "string",
+            "title": "Reporting Timezone"
+          },
+          "band_quantiles": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Band Quantiles"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/Coverage"
+          },
+          "ingested_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Ingested At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "actuals_dataset",
+          "forecasts_dataset",
+          "fuel_type",
+          "auction_window",
+          "delivery_window",
+          "max_horizon_h",
+          "reporting_timezone",
+          "band_quantiles",
+          "coverage",
+          "ingested_at"
+        ],
+        "title": "MetaResponse"
+      },
+      "Metrics": {
+        "properties": {
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "mae_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mae Mw"
+          },
+          "rmse_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rmse Mw"
+          },
+          "bias_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bias Mw"
+          },
+          "p50_abs_error_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P50 Abs Error Mw"
+          },
+          "p90_abs_error_mw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P90 Abs Error Mw"
+          },
+          "nmae_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nmae Pct"
+          }
+        },
+        "type": "object",
+        "required": [
+          "n",
+          "mae_mw",
+          "rmse_mw",
+          "bias_mw",
+          "p50_abs_error_mw",
+          "p90_abs_error_mw",
+          "nmae_pct"
+        ],
+        "title": "Metrics"
+      },
+      "QualityFlag": {
+        "type": "string",
+        "enum": [
+          "FALLBACK_RUN",
+          "NO_FORECAST",
+          "NO_ACTUAL",
+          "PARTIAL_COVERAGE"
+        ],
+        "title": "QualityFlag"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
