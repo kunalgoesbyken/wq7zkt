@@ -1,0 +1,21 @@
+{
+  "default_market_id": "n2ex",
+  "markets": [
+    {
+      "id": "n2ex",
+      "venue": "Nord Pool N2EX",
+      "timezone": "Europe/London",
+      "gate_closure_local": "09:50",
+      "gate_closure_days_before": 1,
+      "delivery_start_local": "23:00"
+    },
+    {
+      "id": "epex",
+      "venue": "EPEX SPOT",
+      "timezone": "Europe/London",
+      "gate_closure_local": "09:20",
+      "gate_closure_days_before": 1,
+      "delivery_start_local": "23:00"
+    }
+  ]
+}

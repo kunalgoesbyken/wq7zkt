@@ -110,9 +110,16 @@ class DecisionDay(Schema):
     hours: list[DecisionHour]
 
 
+class BandCoverage(Schema):
+    n: int
+    at_or_above_lower_ratio: float | None
+    within_band_ratio: float | None
+
+
 class DecisionCalendar(Schema):
     market_id: str
     metrics: Metrics
+    band_coverage: BandCoverage
     days: list[DaySummary]
 
 

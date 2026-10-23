@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const apiOrigin = process.env.API_ORIGIN;
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {
@@ -12,6 +15,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  ...(apiOrigin && {
+    rewrites: async () => [{ source: "/api/:path*", destination: `${apiOrigin}/api/:path*` }],
+  }),
 };
 
-export default nextConfig;
+export default createNextIntlPlugin()(nextConfig);

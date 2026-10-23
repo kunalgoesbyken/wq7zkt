@@ -322,6 +322,15 @@ wheels = [
 ]
 
 [[package]]
+name = "tzdata"
+version = "2026.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d9/68/f1b440335057bfce71b6e50a9d09445aa2ecbd08359a337976627b8409e7/tzdata-2026.5.tar.gz", hash = "sha256:8cc73c0a0bfca7dbfa59235d60b2eff82231dee33f53d206db1acd9173cfc0a7", size = 200404 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/94/21/1e5995a1c920cce14e4bffae20c665ec10e7ed03ab25e006cd741092b718/tzdata-2026.5-py2.py3-none-any.whl", hash = "sha256:b683bd1b6659ddcd810ff02ad09ba821d4bf1065072805063eb35c49617905ac", size = 347996 },
+]
+
+[[package]]
 name = "uvicorn"
 version = "0.54.0"
 source = { registry = "https://pypi.org/simple" }
@@ -426,12 +435,17 @@ dependencies = [
     { name = "fastapi" },
     { name = "polars" },
     { name = "pydantic-settings" },
+    { name = "tzdata" },
 ]
 
 [package.dev-dependencies]
 dev = [
-    { name = "httpx" },
     { name = "ruff" },
+]
+ingest = [
+    { name = "httpx" },
+]
+serve = [
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -440,11 +454,10 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.118" },
     { name = "polars", specifier = ">=1.30" },
     { name = "pydantic-settings", specifier = ">=2.10" },
+    { name = "tzdata", specifier = ">=2025.2" },
 ]
 
 [package.metadata.requires-dev]
-dev = [
-    { name = "httpx", specifier = ">=0.28" },
-    { name = "ruff", specifier = ">=0.13" },
-    { name = "uvicorn", extras = ["standard"], specifier = ">=0.37" },
-]
+dev = [{ name = "ruff", specifier = ">=0.13" }]
+ingest = [{ name = "httpx", specifier = ">=0.28" }]
+serve = [{ name = "uvicorn", extras = ["standard"], specifier = ">=0.37" }]

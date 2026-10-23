@@ -1,0 +1,288 @@
+{
+  "metadata": {
+    "title": "Windward",
+    "titleTemplate": "%s | Windward",
+    "description": "GB wind decision desk for day-ahead power trading: the national wind forecast available at gate closure, with its error quantified."
+  },
+  "header": {
+    "product": "Windward",
+    "tagline": "GB wind decision desk",
+    "toggleTheme": "Switch between light and dark theme"
+  },
+  "nav": {
+    "label": "Main",
+    "decision": "Decision desk",
+    "accuracy": "Accuracy",
+    "methodology": "Methodology"
+  },
+  "dataStatus": {
+    "title": "Data status",
+    "unavailable": "Data service unavailable",
+    "summary": "Elexon data, ingested {date}",
+    "sources": "Actuals from {actuals} ({fuel}), forecasts from {forecasts}, both published by Elexon.",
+    "actuals": "Actuals",
+    "range": "{from} to {to}",
+    "missingPeriods": "Missing half-hours",
+    "missingValue": "{missing} of {total}",
+    "forecastRuns": "Forecast runs",
+    "runsValue": "{count} runs, {from} to {to}",
+    "ingestedAt": "Ingested",
+    "timeZone": "Times shown in"
+  },
+  "units": {
+    "missing": "–",
+    "mw": "{value} MW",
+    "gw": "{value} GW",
+    "gwh": "{value} GWh",
+    "minutes": "{value} min",
+    "hours": "{value} h",
+    "leadTime": "{value} h ahead",
+    "clockHour": "{hour}:00"
+  },
+  "controls": {
+    "market": "Market",
+    "marketOption": "{venue}, gate closure {time}",
+    "deliveryDay": "Delivery day",
+    "previousDay": "Previous delivery day",
+    "nextDay": "Next delivery day",
+    "basis": "Forecast basis",
+    "horizon": "Lead time",
+    "horizonValue": "{hours} h before delivery"
+  },
+  "flags": {
+    "none": "No quality flags",
+    "FALLBACK_RUN": {
+      "label": "Older run",
+      "description": "The latest run before gate closure did not cover this hour, so the value comes from an earlier run."
+    },
+    "NO_FORECAST": {
+      "label": "No forecast",
+      "description": "No forecast for this hour was published before gate closure."
+    },
+    "NO_ACTUAL": {
+      "label": "No actual",
+      "description": "Metered output is missing or incomplete for this hour, so its error cannot be measured."
+    },
+    "PARTIAL_COVERAGE": {
+      "label": "Partial day",
+      "description": "Some hours of the delivery day have no forecast or no actual, so daily totals cover fewer than all hours."
+    }
+  },
+  "states": {
+    "error": {
+      "retry": "Try again",
+      "network": {
+        "title": "The forecast service could not be reached",
+        "description": "Check your connection, then try again. Nothing on this page has changed."
+      },
+      "server": {
+        "title": "The forecast service returned an error",
+        "description": "The data could not be prepared. Try again; if it keeps failing, the data team can check the service logs."
+      },
+      "request": {
+        "title": "This view could not be loaded",
+        "description": "The selected market, date or setting is not available. Pick another one, or try again."
+      }
+    }
+  },
+  "decision": {
+    "title": "Decision desk",
+    "intro": "The latest national wind forecast that was available at the auction deadline, with the uncertainty you should plan around and, in hindsight, how it turned out.",
+    "empty": {
+      "title": "No forecast was available at gate closure",
+      "description": "No forecast run covering this delivery day was published before the deadline. Choose another day or market."
+    },
+    "headline": {
+      "title": "Volume to plan on",
+      "planOn": "Plan on",
+      "not": "not",
+      "firmCaption": "Actual wind met or beat this level in {held} of {hours, number} pilot hours, against a {target} target",
+      "expectedCaption": "Expected wind output from the forecast",
+      "atRisk": "<figure>{amount}</figure> at risk, {share} of the expected volume",
+      "barLabel": "Firm volume, volume at risk and delivered volume for the day",
+      "legendFirm": "Firm",
+      "legendRisk": "At risk",
+      "legendActual": "Delivered {amount}",
+      "firmTarget": "Set so that actual wind beats it in about {target} of hours"
+    },
+    "facts": {
+      "gateClosure": "Gate closure",
+      "gateClosureCaption": "{date}, {venue}",
+      "forecastRun": "Forecast run used",
+      "forecastRunCaption": "Published {age} before gate closure",
+      "noRun": "No run before gate closure",
+      "coverage": "Hours forecast",
+      "coverageValue": "{forecast} of {total}",
+      "mae": "Error in hindsight",
+      "maeCaption": "Mean absolute error; {actual} delivered",
+      "bias": "Bias",
+      "biasCaption": {
+        "over": "Over-forecast: buying on it left you short",
+        "under": "Under-forecast: buying on it left you long",
+        "neutral": "No systematic error"
+      },
+      "calibration": "Band calibration",
+      "calibrationValue": "{days, plural, one {# day} other {# days}}",
+      "calibrationCaption": "Errors from the other pilot days, excluding this one"
+    },
+    "chart": {
+      "title": "Hourly wind output across the delivery day",
+      "description": "Delivery from {start} to {end}, times in {timeZone}",
+      "forecast": "Forecast at gate closure",
+      "actual": "Actual",
+      "band": "Range P{low} to P{high}",
+      "lower": "Firm level",
+      "fallback": "From an older run",
+      "hourRange": "{start} to {end}",
+      "bandRange": "{lower} to {upper}",
+      "error": "Error",
+      "sourceRun": "Source run",
+      "age": "Forecast age",
+      "flagsNote": "Flags: {flags}",
+      "ariaLabel": "Line chart of the hourly wind forecast at gate closure with its uncertainty range, compared with metered output"
+    },
+    "month": {
+      "title": "Delivery days by forecast error",
+      "description": "Each day shaded by its mean absolute error. Across {days} days: error {mae}, bias {bias}. Select a day to open it.",
+      "dayLabel": "{date}, mean absolute error {mae}",
+      "noActuals": "Not yet measurable"
+    }
+  },
+  "accuracy": {
+    "title": "Forecast accuracy",
+    "intro": "How far the forecast was from metered output over the pilot window, either at a fixed lead time or exactly as a trader saw it at gate closure.",
+    "basis": {
+      "horizon": "Fixed lead time",
+      "gate_closure": "At gate closure"
+    },
+    "basisHint": {
+      "horizon": "Each hour is compared with the forecast published that many hours before it.",
+      "gate_closure": "Each hour is compared with the forecast available at the selected market's gate closure."
+    },
+    "window": "{start} to {end}, {hours} hours compared, times in {timeZone}",
+    "metrics": {
+      "title": "Error summary",
+      "mae": "Mean absolute error",
+      "maeCaption": "Typical size of a miss",
+      "rmse": "Root mean square error",
+      "rmseCaption": "Weights large misses more",
+      "bias": "Bias",
+      "biasCaption": {
+        "over": "Over-forecast on average",
+        "under": "Under-forecast on average",
+        "neutral": "No systematic error"
+      },
+      "p50": "Median miss",
+      "p50Caption": "Half of hours missed by less",
+      "p90": "90th percentile miss",
+      "p90Caption": "Nine in ten hours missed by less",
+      "nmae": "Normalised error",
+      "nmaeCaption": "Mean absolute error relative to mean output"
+    },
+    "series": {
+      "title": "Forecast against actual",
+      "forecast": "Forecast",
+      "actual": "Actual",
+      "error": "Error",
+      "ariaLabel": "Line chart comparing the hourly wind forecast with metered output across the window"
+    },
+    "horizonCurve": {
+      "title": "Error by lead time",
+      "description": "How the error grows as the forecast is made further ahead",
+      "mae": "Mean absolute error",
+      "bias": "Bias",
+      "rmse": "Root mean square error",
+      "p90": "90th percentile miss",
+      "hours": "Hours compared",
+      "selected": "Selected lead time",
+      "axis": "Hours ahead",
+      "ariaLabel": "Line chart of mean absolute error and bias against forecast lead time"
+    },
+    "histogram": {
+      "title": "Distribution of errors",
+      "description": "Positive errors are over-forecasts, which leave a buyer short",
+      "over": "Over-forecast",
+      "under": "Under-forecast",
+      "range": "{lower} to {upper}",
+      "hours": "Hours",
+      "share": "Share of hours",
+      "ariaLabel": "Histogram of hourly forecast errors"
+    },
+    "byHour": {
+      "title": "Error by hour of day",
+      "description": "Hours in {timeZone}",
+      "mae": "Mean absolute error",
+      "bias": "Bias",
+      "hours": "Hours compared",
+      "ariaLabel": "Bar chart of mean absolute error and bias for each hour of the day"
+    },
+    "empty": {
+      "title": "No hours to compare",
+      "description": "No hour in the window has both a forecast and a metered actual for this setting. Try another lead time or market."
+    }
+  },
+  "methodology": {
+    "title": "Methodology",
+    "intro": "How Windward turns Elexon's published wind data into a decision view and an accuracy record, and where its limits are.",
+    "contents": "On this page",
+    "scope": {
+      "title": "Scope of this pilot",
+      "auctionWindow": "Auction dates",
+      "deliveryWindow": "Delivery days",
+      "datasets": "Datasets",
+      "datasetsValue": "{actuals} ({fuel}) and {forecasts}",
+      "band": "Uncertainty range",
+      "bandValue": "P{low} to P{high}",
+      "markets": "Gate closures",
+      "marketValue": "{venue} at {time}, {timeZone}"
+    },
+    "sources": {
+      "title": "Data sources",
+      "body": [
+        "Actual output comes from Elexon's FUELHH dataset, filtered to the WIND fuel type: metered generation from transmission-connected wind farms for every half-hour settlement period.",
+        "Forecasts come from Elexon's WINDFOR dataset: national wind generation forecasts published several times a day, each run covering roughly the next two days. Every run is kept with its publish time, so the forecast that was available at any moment can be reconstructed."
+      ]
+    },
+    "alignment": {
+      "title": "Aligning forecasts with actuals",
+      "body": [
+        "Forecasts are hourly while actuals are half-hourly. Each hour's actual is the mean of its two half-hours, so both sides describe the same average power over the same hour.",
+        "An hour with only one of its two half-hours present is treated as incomplete and excluded from every error statistic rather than estimated."
+      ],
+      "sensitivity": "Comparing only the half-hour that starts on the hour would lower the January gate-closure mean absolute error by about 18 MW, under 1%, so the alignment choice does not drive the results."
+    },
+    "selection": {
+      "title": "Which forecast a trader actually had",
+      "body": [
+        "Day-ahead power for GB is bought in auctions that close the morning before delivery, and each market has its own gate closure, listed under Scope of this pilot. For every delivery hour, Windward selects the latest forecast published before the chosen market's gate closure.",
+        "Forecast runs are published several times a day, so a run can land between two markets' deadlines. When that happens, buyers on different markets really had different forecasts; the decision desk shows which run each market had.",
+        "When the latest run before the deadline does not cover an hour, the value comes from the most recent earlier run that does, and the hour is flagged as coming from an older run."
+      ]
+    },
+    "band": {
+      "title": "Uncertainty range and energy at risk",
+      "body": [
+        "The range around each forecast comes from the errors of comparable forecasts on the other pilot days. Hours are grouped by forecast level, because errors grow as wind output rises, and each group's range is the observed spread of its errors.",
+        "The edges use a finite-sample (conformal) correction, so a small calibration set does not make the range look tighter than it is. The lower edge is the level actual wind is expected to beat about nine times in ten: plan on that, not on the expected value. The decision desk reports how often it actually held across the pilot.",
+        "Energy at risk is the expected daily volume minus the firm daily volume. It is the amount a buyer relying on the forecast may have to cover in balancing.",
+        "Calibration leaves the day being assessed out of its own range, so the range is never fitted to the outcome it is judged against."
+      ]
+    },
+    "sign": {
+      "title": "Error sign convention",
+      "body": [
+        "Error is forecast minus actual. A positive error, or a positive bias, means the forecast was too high: a buyer who planned on it bought too little and ends up short, paying balancing prices for the difference.",
+        "A negative error means the forecast was too low and the buyer ends up long."
+      ]
+    },
+    "caveats": {
+      "title": "Caveats",
+      "body": [
+        "The pilot covers one winter month. Error statistics from a single month describe that month's weather and may not hold in other seasons.",
+        "FUELHH and WINDFOR describe transmission-connected wind only. Embedded wind on distribution networks appears as reduced demand and is outside this view.",
+        "The uncertainty range is calibrated on the days in the pilot window, so it inherits their weather regime and sample size.",
+        "Hours missing a forecast or an actual are excluded from statistics and flagged, never filled in."
+      ]
+    }
+  }
+}

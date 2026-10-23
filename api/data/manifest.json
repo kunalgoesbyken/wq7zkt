@@ -1,0 +1,22 @@
+{
+  "ingested_at": "2026-10-23T13:37:28.843630Z",
+  "coverage": {
+    "actuals_from": "2025-12-31T00:00:00Z",
+    "actuals_to": "2026-02-02T23:30:00Z",
+    "actual_periods": 1632,
+    "missing_actual_periods": 0,
+    "forecast_runs": 296,
+    "forecast_runs_from": "2025-12-28T02:30:00Z",
+    "forecast_runs_to": "2026-02-02T22:30:00Z"
+  },
+  "validation": {
+    "actual_rows_received": 1632,
+    "actual_duplicates_dropped": 0,
+    "actual_negative_dropped": 0,
+    "forecast_rows_received": 21608,
+    "forecast_duplicates_dropped": 0,
+    "forecast_negative_dropped": 0,
+    "forecast_hindcasts_dropped": 4441,
+    "missing_actual_period_starts": []
+  }
+}

@@ -130,15 +130,25 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "404": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorBody"
                 }
               }
-            }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
           }
         }
       }
@@ -186,15 +196,25 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "404": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorBody"
                 }
               }
-            }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
           }
         }
       }
@@ -287,15 +307,25 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "404": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorBody"
                 }
               }
-            }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
           }
         }
       }
@@ -351,15 +381,25 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "404": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorBody"
                 }
               }
-            }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
           }
         }
       }
@@ -484,6 +524,43 @@
           "by_hour"
         ],
         "title": "AccuracyReport"
+      },
+      "BandCoverage": {
+        "properties": {
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "at_or_above_lower_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "At Or Above Lower Ratio"
+          },
+          "within_band_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Within Band Ratio"
+          }
+        },
+        "type": "object",
+        "required": [
+          "n",
+          "at_or_above_lower_ratio",
+          "within_band_ratio"
+        ],
+        "title": "BandCoverage"
       },
       "Basis": {
         "type": "string",
@@ -678,6 +755,9 @@
           "metrics": {
             "$ref": "#/components/schemas/Metrics"
           },
+          "band_coverage": {
+            "$ref": "#/components/schemas/BandCoverage"
+          },
           "days": {
             "items": {
               "$ref": "#/components/schemas/DaySummary"
@@ -690,6 +770,7 @@
         "required": [
           "market_id",
           "metrics",
+          "band_coverage",
           "days"
         ],
         "title": "DecisionCalendar"
@@ -868,18 +949,23 @@
         ],
         "title": "DecisionHour"
       },
-      "HTTPValidationError": {
+      "ErrorBody": {
         "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
           "detail": {
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            },
-            "type": "array",
+            "type": "string",
             "title": "Detail"
           }
         },
         "type": "object",
-        "title": "HTTPValidationError"
+        "required": [
+          "code",
+          "detail"
+        ],
+        "title": "ErrorBody"
       },
       "HistogramBin": {
         "properties": {
@@ -1257,46 +1343,6 @@
           "PARTIAL_COVERAGE"
         ],
         "title": "QualityFlag"
-      },
-      "ValidationError": {
-        "properties": {
-          "loc": {
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Location"
-          },
-          "msg": {
-            "type": "string",
-            "title": "Message"
-          },
-          "type": {
-            "type": "string",
-            "title": "Error Type"
-          },
-          "input": {
-            "title": "Input"
-          },
-          "ctx": {
-            "type": "object",
-            "title": "Context"
-          }
-        },
-        "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
-        "title": "ValidationError"
       }
     }
   }

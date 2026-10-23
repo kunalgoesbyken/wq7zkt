@@ -6,14 +6,22 @@ dependencies = [
     "fastapi>=0.118",
     "polars>=1.30",
     "pydantic-settings>=2.10",
+    "tzdata>=2025.2",
 ]
 
 [dependency-groups]
 dev = [
-    "httpx>=0.28",
     "ruff>=0.13",
+]
+ingest = [
+    "httpx>=0.28",
+]
+serve = [
     "uvicorn[standard]>=0.37",
 ]
+
+[tool.uv]
+default-groups = ["dev", "ingest", "serve"]
 
 [tool.vercel]
 entrypoint = "windesk.main:app"

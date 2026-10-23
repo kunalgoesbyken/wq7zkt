@@ -7,3 +7,6 @@ __pycache__/
 .env*
 !.env.example
 .ruff_cache/
+AGENTS.md
+CLAUDE.md
+web/src/lib/api/schema.d.ts
